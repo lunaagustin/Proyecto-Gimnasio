@@ -1,15 +1,16 @@
-import { IsInt, IsString } from "class-validator";
+import { IsString, IsInt } from "class-validator";
 
 export class CreateEjercicioDto {
+
+    @IsString()
+    nombre: string;
+
+    @IsString()
+    instrucciones: string;
+
+    @IsString()
+    equipamiento: string;
+
     @IsInt()
-    idEjercicio:number;
-
-    @IsString()
-    nombre:string;
-
-    @IsString()
-    instrucciones:string;
-
-    @IsString()
-    equipamiento:string;
+    idEntrenador: number;
 }

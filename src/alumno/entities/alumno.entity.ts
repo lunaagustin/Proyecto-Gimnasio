@@ -1,58 +1,40 @@
-import { Asignacion } from "src/asignacion/entities/asignacion.entity";
+import { Column, Entity, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Entrenador } from "src/entrenador/entities/entrenador.entity";
 import { Plan } from "src/plan/entities/plan.entity";
-import { Usuario } from "src/usuario/entities/usuario.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Asignacion } from "src/asignacion/entities/asignacion.entity";
 
 @Entity('alumno')
 export class Alumno {
 
     @PrimaryGeneratedColumn()
-    idAlumno:number
+    idAlumno: number;
 
-    @Column()
-    peso:number
+    @Column({ type: "decimal" })
+    peso: number;
 
-    @Column()
-    altura:number;
+    @Column({ type: "decimal" })
+    altura: number;
 
-    @Column()
-    fechaInicio:Date;
+    @Column({ type: 'date' })
+    fechaInicio: string;
 
-    @Column()
-    lesiones:string;
+    @Column({ nullable: true })
+    lesiones: string;
 
-    @OneToOne(()=>Usuario)
+    @ManyToOne(() => Usuario, usuario => usuario.alumnos)
     @JoinColumn()
-    rol:Usuario;
+    idUsuario: Usuario;
 
-    @ManyToOne(()=> Plan, planes => planes.planAlumno)
+    @ManyToOne(() => Entrenador, entrenador => entrenador.alumnos)
     @JoinColumn()
-    idPlan:Plan;
+    idEntrenador: Entrenador;
 
-    @ManyToOne(()=> Asignacion, asignacion => asignacion.idAlumno)
-    asignaciones:Asignacion[];
-
-    @ManyToOne(()=> Entrenador, entrenador => entrenador.alumnos)
+    @ManyToOne(() => Plan, plan => plan.alumnos)
     @JoinColumn()
-    idEntrenador:Entrenador;
+    idPlan: Plan;
 
-    constructor(peso:number, altura:number, fechaInicio:Date, lesiones:string){
-        this.peso= peso;
-        this.altura= altura;
-        this.fechaInicio= fechaInicio;
-        this.lesiones= lesiones;
-    }
-
-    public getPeso():number{return this.peso;}
-    public setPeso(peso:number):void{this.peso = peso;}
-
-    public getAltura():number{return this.altura;}
-    public setAltura(altura:number):void{this.altura = altura;}
-
-    public getFechaInicio():Date{return this.fechaInicio;}
-    public setFechaInicio(fechaInicio:Date):void{this.fechaInicio = fechaInicio;}
-
-    public getLesiones():string{return this.lesiones;}
-    public setLesiones(lesiones:string):void{this.lesiones = lesiones;}
+    @OneToMany(() => Asignacion, asign => asign.idAlumno)
+    asignaciones: Asignacion[];
 }
+

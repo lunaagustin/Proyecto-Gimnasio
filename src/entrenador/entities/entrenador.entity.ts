@@ -1,34 +1,28 @@
-import { Alumno } from "src/alumno/entities/alumno.entity";
-import { Ejercicio } from "src/ejercicio/entities/ejercicio.entity";
-import { Rutina } from "src/rutina/entities/rutina.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Usuario } from "src/usuario/entities/usuario.entity";
-import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Alumno } from "src/alumno/entities/alumno.entity";
+import { Rutina } from "src/rutina/entities/rutina.entity";
+import { Ejercicio } from "src/ejercicio/entities/ejercicio.entity";
 
 @Entity('entrenador')
 export class Entrenador {
+
     @PrimaryGeneratedColumn()
-    idEntrenador:number;
+    idEntrenador: number;
 
     @Column()
-    cvCertificacion:string;
+    cvCertificacion: string;
 
-    @OneToOne(()=>Usuario)
+    @ManyToOne(() => Usuario, usuario => usuario.entrenadores)
     @JoinColumn()
-    rol:Usuario;
+    idUsuario: Usuario;
 
-    @OneToMany(()=> Alumno, alumnos => alumnos.idEntrenador)
-    alumnos:Alumno[];
+    @OneToMany(() => Alumno, alumno => alumno.idEntrenador)
+    alumnos: Alumno[];
 
-    @OneToMany(()=> Ejercicio, ejercicio => ejercicio.idEntrenador)
-    ejercicios:Ejercicio[];
+    @OneToMany(() => Rutina, rutina => rutina.idEntrenador)
+    rutinas: Rutina[];
 
-    @OneToMany(()=> Rutina, rutina => rutina.idEntrenador)
-    rutinas:Rutina[];
-
-    constructor(cvCertificacion:string){
-        this.cvCertificacion= cvCertificacion;
-    }
-
-    public getCvCertificacion():string{return this.cvCertificacion;}
-    public setCvCertificacion(cvCertificacion:string):void{this.cvCertificacion = cvCertificacion;}
+    @OneToMany(() => Ejercicio, ejercicio => ejercicio.idEntrenador)
+    ejercicios: Ejercicio[];
 }
