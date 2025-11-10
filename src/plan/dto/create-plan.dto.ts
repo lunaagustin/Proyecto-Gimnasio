@@ -1,13 +1,10 @@
-import { IsInt, IsString } from "class-validator";
+import { IsString, IsNumber } from "class-validator";
 
 export class CreatePlanDto {
 
-    @IsInt()
-    idPlan:number;
-
     @IsString()
-    tipo:string;
+    tipo: string;
 
-    @IsInt()
-    precio:number;
+    @IsNumber()
+    precio: number;
 }

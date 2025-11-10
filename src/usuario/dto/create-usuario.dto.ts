@@ -1,4 +1,10 @@
-import { IsString } from "class-validator";
+import { IsEnum, IsString } from "class-validator";
+
+export enum Rol {
+    ALUMNO= "alumno",
+    ENTRENADOR= "entrenador",
+    ADMIN= "admin"
+}
 
 export class CreateUsuarioDto {
 
@@ -8,6 +14,6 @@ export class CreateUsuarioDto {
     @IsString()
     email:string;
 
-    @IsString()
-    rol:string;
+    @IsEnum(Rol)
+    rol:Rol;
 }

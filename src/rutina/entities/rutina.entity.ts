@@ -1,39 +1,29 @@
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, ManyToMany, JoinTable, PrimaryGeneratedColumn } from "typeorm";
+import { Entrenador } from "src/entrenador/entities/entrenador.entity";
 import { Asignacion } from "src/asignacion/entities/asignacion.entity";
 import { Ejercicio } from "src/ejercicio/entities/ejercicio.entity";
-import { Entrenador } from "src/entrenador/entities/entrenador.entity";
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('rutina')
 export class Rutina {
+
     @PrimaryGeneratedColumn()
-    idRutina:number;
+    idRutina: number;
 
     @Column()
-    nombre:string;
+    nombre: string;
 
-    @Column()
-    descripcion:string;
+    @Column({ type: 'text' })
+    descripcion: string;
 
-    @ManyToOne(()=> Entrenador, entrenador => entrenador.rutinas)
+    @ManyToOne(() => Entrenador, entrenador => entrenador.rutinas)
     @JoinColumn()
-    idEntrenador:Entrenador;
+    idEntrenador: Entrenador;
 
-    @OneToMany(()=> Asignacion, asignacion => asignacion.idRutina)
-    asignaciones:Asignacion[];
+    @OneToMany(() => Asignacion, asignacion => asignacion.idRutina)
+    asignaciones: Asignacion[];
 
-    @ManyToMany(type => Ejercicio)
-    @JoinTable()
-    ejercicios:Ejercicio[];
-
-    constructor(nombre:string, descripcion:string){
-        this.nombre= nombre;
-        this.descripcion= descripcion;
-    }
-
-    public getNombre():string{return this.nombre;}
-    public setNombre(nombre:string):void{this.nombre = nombre;}
-
-    public getDescripcion():string{return this.descripcion;}
-    public setDescripcion(descripcion:string):void{this.descripcion = descripcion;}
-
+    @ManyToMany(() => Ejercicio, ejercicio => ejercicio.rutinas)
+    @JoinTable()   // genera la tabla intermedia
+    ejercicios: Ejercicio[];
 }
+
