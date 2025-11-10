@@ -1,12 +1,16 @@
-import { IsDate, IsInt, IsString } from "class-validator";
+import { IsDateString, IsInt, IsString } from "class-validator";
 
 export class CreateAsignacionDto {
-    @IsInt()
-    idAsignacion:number;
 
-    @IsDate()
-    fechaAsignada:Date;
+    @IsDateString()
+    fechaAsignada: string;
 
     @IsString()
-    estado:string;
+    estado: string;
+
+    @IsInt()
+    idRutina: number;
+
+    @IsInt()
+    idAlumno: number;
 }

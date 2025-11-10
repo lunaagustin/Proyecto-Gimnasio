@@ -1,11 +1,10 @@
-import { IsInt, IsString } from "class-validator";
+import { IsString, IsInt } from "class-validator";
 
 export class CreateEntrenadorDto {
-    
+
     @IsString()
-    cvCertificacion:string;
+    cvCertificacion: string;
 
     @IsInt()
-    idEntrenador:number;
-
+    idUsuario: number;
 }

@@ -1,15 +1,16 @@
-import { IsDecimal, IsInt } from "class-validator";
+import { IsNumber, IsInt } from "class-validator";
 
 export class CreateSerieDto {
-    @IsInt()
-    idSerie:number;
 
     @IsInt()
-    repeticiones:number;
+    repeticiones: number;
 
-    @IsDecimal()
-    peso:number;
+    @IsNumber()
+    peso: number;
 
     @IsInt()
-    descanso:number;
+    descanso: number;
+
+    @IsInt()
+    idEjercicio: number;
 }
