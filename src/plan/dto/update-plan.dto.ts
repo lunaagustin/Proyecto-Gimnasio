@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreatePlanDto } from './create-plan.dto';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { Transform } from 'class-transformer';
 
-export class UpdatePlanDto extends PartialType(CreatePlanDto) {}
+export class UpdatePlanDto{
+    @IsString()
+    @IsNotEmpty()
+    @Transform(({value}) => value.trim())
+    @IsOptional()
+    tipo?: string;
+    
+    @IsNumber()
+    @IsNotEmpty()
+    @IsOptional()
+    precio?: number;
+}
