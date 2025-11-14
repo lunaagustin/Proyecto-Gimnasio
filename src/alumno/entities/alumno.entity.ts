@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn, OneToOne } from "typeorm";
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Entrenador } from "src/entrenador/entities/entrenador.entity";
 import { Plan } from "src/plan/entities/plan.entity";
@@ -22,7 +22,7 @@ export class Alumno {
     @Column({ nullable: true })
     lesiones: string;
 
-    @ManyToOne(() => Usuario, usuario => usuario.alumnos)
+    @OneToOne(() => Usuario, usuario => usuario.alumnos)
     @JoinColumn()
     idUsuario: Usuario;
 
