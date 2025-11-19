@@ -15,9 +15,9 @@ export class Rutina {
     @Column({ type: 'text' })
     descripcion: string;
 
-    /*@ManyToOne(() => Entrenador, entrenador => entrenador.rutinas)
-    @JoinColumn()
-    idEntrenador: Entrenador;
+    @ManyToOne(() => Entrenador, entrenador => entrenador.rutinas)
+    @JoinColumn({ name: "identrenador" })
+    entrenador: Entrenador;
 
     @OneToMany(() => Asignacion, asignacion => asignacion.idRutina)
     asignaciones: Asignacion[];

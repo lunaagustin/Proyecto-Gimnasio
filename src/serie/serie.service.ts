@@ -1,4 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Serie } from './entities/serie.entity';
 import { CreateSerieDto } from './dto/create-serie.dto';
 import { UpdateSerieDto } from './dto/update-serie.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,35 +10,24 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class SerieService {
-  constructor(
-    @InjectRepository(Serie)
-    private readonly SerieRepository: Repository<Serie>,
-  ) {} /* decorador Inject le pasamos la entity*/
+  constructor(@InjectRepository(Serie) private readonly serieRepository: Repository<Serie>,) { }
 
-  public async createSerie(Serie: CreateSerieDto) {
-    const newSerie = this.SerieRepository.create(Serie);
-    return this.SerieRepository.save(newSerie);
+  public async findAllSeries(): Promise<Serie[]> {
+    let series: Serie[] = await this.serieRepository.find();
+    return series;
   }
 
-  public async getSeries(): Promise<Serie[]> {
-  try {
-    const Series = await this.SerieRepository.find();
-
-    if (Series.length === 0) {
-      throw new HttpException('No hay Series registrados', HttpStatus.NOT_FOUND);
+  public async findOneSerie(id: number): Promise<Serie> {
+    let serie: Serie | null = await this.serieRepository.findOne({ where: { idSerie: id } });
+    if (!serie) {
+      throw new NotFoundException("La serie no se encuentra");
+    } else {
+      try {
+        return serie;
+      } catch (error) {
+        throw new InternalServerErrorException('Error interno al encontrar la serie.');
+      }
     }
-
-    return Series;
-
-  } catch (error) {
-    if (error instanceof HttpException) {
-      throw error;
-    }
-
-    throw new HttpException(
-      'Error interno al obtener Series',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
   }
 }
 
@@ -56,39 +48,30 @@ export class SerieService {
         throw error;
       }
 
-      // Cualquier otro error → 500
-      throw new HttpException(
-        'Error interno al buscar el Serie',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+  public async createSerie(serie: CreateSerieDto): Promise<Serie> {
+    try {
+      let nuevaSerie: Serie = await this.serieRepository.create(serie);
+      return await this.serieRepository.save(nuevaSerie);
+    } catch (error) {
+      throw new InternalServerErrorException('Error interno al crear la serie.');
     }
   }
 
-  public async deleteSerie(id: number) {
-  try {
-    const result = await this.SerieRepository.delete(id);
-
-    // Si no eliminó ninguna fila → Serie no existe
-    if (result.affected === 0) {
-      throw new HttpException(
-        `Serie con ID ${id} no encontrado`,
-        HttpStatus.NOT_FOUND,
-      );
+  public async updateSerie(id: number, serie: UpdateSerieDto): Promise<Serie> {
+    let serieId: Serie | null = await this.serieRepository.findOne({ where: { idSerie: id } });
+    if (!serieId) {
+      throw new NotFoundException("No se encuentra la serie");
+    } else {
+      try {
+        let serieActualizada: Serie = await this.serieRepository.save({
+          ...serieId,
+          ...serie,
+        });
+        return serieActualizada;
+      } catch (error) {
+        throw new InternalServerErrorException('Error interno al actualizar la serie.');
+      }
     }
-
-    return {
-      message: `Serie con ID ${id} eliminado correctamente`,
-    };
-
-  } catch (error) {
-    if (error instanceof HttpException) {
-      throw error;
-    }
-
-    throw new HttpException(
-      `Error al eliminar el Serie con ID ${id}`,
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
   }
 }
 
@@ -99,29 +82,17 @@ export class SerieService {
       where: { idSerie: id },
     });
 
-    if (!SerieExistente) {
-      throw new HttpException(
-        `Serie con ID ${id} no encontrado`,
-        HttpStatus.NOT_FOUND,
-      );
+  public async deleteSerie(id: number): Promise<boolean> {
+    let serie: Serie | null = await this.serieRepository.findOne({ where: { idSerie: id } });
+    if (!serie) {
+      throw new NotFoundException("No se encuentra la serie");
+    } else {
+      try {
+        await this.serieRepository.delete(serie.idSerie)
+        return true;
+      } catch (error) {
+        throw new InternalServerErrorException('Error interno al borrar la serie.');
+      }
     }
-
-    // Intentamos actualizar
-    const resultado = await this.SerieRepository.update(id, user);
-
-    return {
-      message: "Serie actualizado correctamente",
-      updated: resultado,
-    };
-  } catch (error) {
-    throw new HttpException(
-      {
-        status: HttpStatus.BAD_REQUEST,
-        error: `Error al actualizar el Serie ${id}: ${error.message}`,
-      },
-      HttpStatus.BAD_REQUEST,
-    );
   }
-}
-
 }

@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, NotFoundException, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { RutinaService } from './rutina.service';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
@@ -8,39 +8,29 @@ import { Rutina } from './entities/rutina.entity';
 export class RutinaController {
   constructor(private readonly rutinaService: RutinaService) {}
 
- @Post()
-   async create(@Body() Rutina: CreateRutinaDto) {
-     return this.rutinaService.createRutina(Rutina);
-   }
+  @Post()
+  async createRutina(@Body() rutina: CreateRutinaDto) {
+    return this.rutinaService.createRutina(rutina);
+  }
 
- 
-   @Get()
-   async getRutinas() {
-     return this.rutinaService.getRutinas();
-   }
- 
-   @Get(':id')
-   async getRutina(@Param('id', ParseIntPipe) id: number): Promise<Rutina> {
-     /*con parseIntPipe cambiamos de string a number*/
-     const rutina = await this.rutinaService.getRutina(id);
-     if (!rutina) {
-       throw new NotFoundException(`Rutina con id ${id} no se encuentra`);
-     }
-     return rutina;
-   }
- 
-   @Delete(':id')
-   deleteRutina(@Param('id', ParseIntPipe) id: number) {
-     return this.rutinaService.deleteRutina(id);
-   }
- 
-   @Put(':id')
-   updateRutina(
-     @Param('id', ParseIntPipe) id: number,
-     @Body()
-     user: UpdateRutinaDto,
-   ) {
-     return this.rutinaService.updateRutina(id, user);
-   }
- }
- 
+  @Get()
+  async findAllRutinas() {
+    return this.rutinaService.findAllRutinas();
+  }
+
+  @Get(':id')
+  async findOneRutina(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),) id: number) {
+    return this.rutinaService.findOneRutina(+id);
+  }
+
+  @Put(':id')
+  async updateRutina(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),) id: number, 
+  @Body() rutina: UpdateRutinaDto) {
+    return this.rutinaService.updateRutina(+id, rutina);
+  }
+
+  @Delete(':id')
+  async deleteRutina(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),) id: number) {
+    return this.rutinaService.deleteRutina(+id);
+  }
+}

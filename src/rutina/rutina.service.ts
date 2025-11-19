@@ -1,4 +1,7 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Rutina } from './entities/rutina.entity';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -7,35 +10,11 @@ import { Rutina } from './entities/rutina.entity';
 
 @Injectable()
 export class RutinaService {
-  constructor(
-    @InjectRepository(Rutina)
-    private readonly rutinaRepository: Repository<Rutina>,
-  ) {} /* decorador Inject le pasamos la entity*/
+  constructor(@InjectRepository(Rutina) private readonly rutinaRepository: Repository<Rutina>,) { }
 
-  public async createRutina(Rutina: CreateRutinaDto) {
-    const newRutina = this.rutinaRepository.create(Rutina);
-    return this.rutinaRepository.save(newRutina);
-  }
-
-  public async getRutinas(): Promise<Rutina[]> {
-  try {
-    const rutinas = await this.rutinaRepository.find();
-
-    if (rutinas.length === 0) {
-      throw new HttpException('No hay rutinas registradas', HttpStatus.NOT_FOUND);
-    }
-
+  public async findAllRutinas(): Promise<Rutina[]> {
+    let rutinas: Rutina[] = await this.rutinaRepository.find();
     return rutinas;
-
-  } catch (error) {
-    if (error instanceof HttpException) {
-      throw error;
-    }
-
-    throw new HttpException(
-      'Error interno al obtener rutinas',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
   }
 }
 
@@ -56,39 +35,43 @@ export class RutinaService {
         throw error;
       }
 
-      // Cualquier otro error → 500
-      throw new HttpException(
-        'Error interno al buscar la rutina',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+  public async findOneRutina(id: number): Promise<Rutina> {
+    let rutina: Rutina | null = await this.rutinaRepository.findOne({ where: { idRutina: id } });
+    if (!rutina) {
+      throw new NotFoundException("La rutina no se encuentra");
+    } else {
+      try {
+        return rutina;
+      } catch (error) {
+        throw new InternalServerErrorException('Error interno al encontrar la rutina.');
+      }
+    }
+  }
+  
+  public async createRutina(rutina: CreateRutinaDto): Promise<Rutina> {
+    try {
+      let nuevaRutina: Rutina = await this.rutinaRepository.create(rutina);
+      return await this.rutinaRepository.save(nuevaRutina);
+    } catch (error) {
+      throw new InternalServerErrorException('Error interno al crear la rutina.');
     }
   }
 
-  public async deleteRutina(id: number) {
-  try {
-    const result = await this.rutinaRepository.delete(id);
-
-    // Si no eliminó ninguna fila → rutina no existe
-    if (result.affected === 0) {
-      throw new HttpException(
-        `Rutina con ID ${id} no encontrada`,
-        HttpStatus.NOT_FOUND,
-      );
+  public async updateRutina(id: number, rutina: UpdateRutinaDto): Promise<Rutina> {
+    let rutinaId: Rutina | null = await this.rutinaRepository.findOne({ where: { idRutina: id } });
+    if (!rutinaId) {
+      throw new NotFoundException("No se encuentra la rutina");
+    } else {
+      try {
+        let rutinaActualizada: Rutina = await this.rutinaRepository.save({
+          ...rutinaId,
+          ...rutina,
+        });
+        return rutinaActualizada;
+      } catch (error) {
+        throw new InternalServerErrorException('Error interno al actualizar la rutina.');
+      }
     }
-
-    return {
-      message: `Rutina con ID ${id} eliminado correctamente`,
-    };
-
-  } catch (error) {
-    if (error instanceof HttpException) {
-      throw error;
-    }
-
-    throw new HttpException(
-      `Error al eliminar la rutina con ID ${id}`,
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
   }
 }
 
@@ -99,28 +82,18 @@ export class RutinaService {
       where: { idRutina: id },
     });
 
-    if (!rutinaExistente) {
-      throw new HttpException(
-        `Rutina con ID ${id} no encontrada`,
-        HttpStatus.NOT_FOUND,
-      );
+  public async deleteRutina(id: number): Promise<boolean> {
+    let rutina: Rutina | null = await this.rutinaRepository.findOne({ where: { idRutina: id } });
+    if (!rutina) {
+      throw new NotFoundException("No se encuentra la rutina");
+    } else {
+      try {
+        await this.rutinaRepository.delete(rutina.idRutina)
+        return true;
+      } catch (error) {
+        throw new InternalServerErrorException('Error interno al borrar la rutina.');
+      }
     }
-
-    // Intentamos actualizar
-    const resultado = await this.rutinaRepository.update(id, user);
-
-    return {
-      message: "Rutina actualizada correctamente",
-      updated: resultado,
-    };
-  } catch (error) {
-    throw new HttpException(
-      {
-        status: HttpStatus.BAD_REQUEST,
-        error: `Error al actualizar la rutina ${id}: ${error.message}`,
-      },
-      HttpStatus.BAD_REQUEST,
-    );
   }
 }
 

@@ -20,7 +20,7 @@ export class Entrenador {
     @OneToMany(() => Alumno, alumno => alumno.idEntrenador)
     alumnos: Alumno[];
 
-    @OneToMany(() => Rutina, rutina => rutina.idEntrenador)
+    @OneToMany(() => Rutina, rutina => rutina.entrenador)
     rutinas: Rutina[];
 
     @OneToMany(() => Ejercicio, ejercicio => ejercicio.idEntrenador)

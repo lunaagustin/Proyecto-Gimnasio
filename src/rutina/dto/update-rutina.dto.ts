@@ -1,13 +1,18 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateRutinaDto } from './create-rutina.dto';
-import { IsOptional, IsString } from 'class-validator';
+import { IsInt, IsNotEmpty, IsOptional, IsString, MinLength } from 'class-validator';
 
-export class UpdateRutinaDto extends PartialType(CreateRutinaDto) {
-  @IsString()
-  @IsOptional()
-  nombre?: string;
-
-  @IsString()
-  @IsOptional()
-  descripcion?: string;
+export class UpdateRutinaDto {
+    @IsString()
+    @MinLength(1)
+    @IsNotEmpty()
+    @IsOptional()
+    nombre?: string;
+    
+    @IsString()
+    @IsNotEmpty()
+    @IsOptional()
+    descripcion?: string;
+    
+    @IsInt()
+    @IsOptional()
+    idEntrenador?: number;
 }
