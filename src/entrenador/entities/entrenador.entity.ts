@@ -13,9 +13,9 @@ export class Entrenador {
     @Column()
     cvCertificacion: string;
 
-    @OneToOne(() => Usuario, usuario => usuario.entrenadores)
+   @OneToOne(() => Usuario, usuario => usuario.entrenadores)
     @JoinColumn()
-    idUsuario: Usuario;
+    usuario: Usuario;
 
     @OneToMany(() => Alumno, alumno => alumno.idEntrenador)
     alumnos: Alumno[];
@@ -23,6 +23,6 @@ export class Entrenador {
     @OneToMany(() => Rutina, rutina => rutina.entrenador)
     rutinas: Rutina[];
 
-    @OneToMany(() => Ejercicio, ejercicio => ejercicio.idEntrenador)
+    @OneToMany(() => Ejercicio, ejercicio => ejercicio.entrenador)
     ejercicios: Ejercicio[];
 }

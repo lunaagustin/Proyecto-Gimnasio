@@ -18,9 +18,9 @@ export class Ejercicio {
     @Column()
     equipamiento: string;
 
-    @ManyToOne(() => Entrenador, entrenador => entrenador.ejercicios)
+   @ManyToOne(() => Entrenador, entrenador => entrenador.ejercicios)
     @JoinColumn()
-    idEntrenador: Entrenador;
+    entrenador: Entrenador;
 
     @OneToMany(() => Serie, serie => serie.ejercicio)
     series: Serie[];

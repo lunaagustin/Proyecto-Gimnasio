@@ -9,7 +9,7 @@ import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
 import { Entrenador } from './entities/entrenador.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Entrenador,Usuario,Alumno,Rutina,Ejercicio])],
+  imports: [TypeOrmModule.forFeature([Entrenador,Usuario,Alumno,Rutina,Ejercicio])], /*entidades que voy a estar utilizando*/
   controllers: [EntrenadorController],
   providers: [EntrenadorService],
 })

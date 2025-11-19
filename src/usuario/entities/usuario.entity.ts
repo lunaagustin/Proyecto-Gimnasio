@@ -1,38 +1,42 @@
-import { Column, Entity, PrimaryGeneratedColumn, OneToMany, OneToOne } from "typeorm";
-import { Entrenador } from "src/entrenador/entities/entrenador.entity";
-import { Alumno } from "src/alumno/entities/alumno.entity";
+import {
+  Column,
+  Entity,
+  PrimaryGeneratedColumn,
+  OneToMany,
+  OneToOne,
+} from 'typeorm';
+import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
+import { Alumno } from 'src/alumno/entities/alumno.entity';
 
 export enum Rol {
-    ALUMNO = "alumno",
-    ENTRENADOR = "entrenador",
-    ADMIN = "admin",
+  ALUMNO = 'alumno',
+  ENTRENADOR = 'entrenador',
+  ADMIN = 'admin',
 }
 
 @Entity('usuario')
 export class Usuario {
+  @PrimaryGeneratedColumn()
+  idUsuario: number;
 
-    @PrimaryGeneratedColumn()
-    idUsuario: number;
+  @Column()
+  nombre: string;
 
-    @Column()
-    nombre: string;
+  @Column({ unique: true })
+  email: string;
 
-    @Column({ unique: true })
-    email: string;
+  @Column()
+  contraseña: string;
 
-    @Column()
-    contraseña:string;
+  @Column({
+    type: 'enum',
+    enum: Rol,
+  })
+  rol: Rol;
 
-    @Column({
-        type: "enum",
-        enum: Rol
-    })
-    rol: Rol;
+  @OneToOne(() => Entrenador, (entrenador) => entrenador.usuario)
+  entrenadores: Entrenador[];
 
-    @OneToOne(() => Entrenador, entrenador => entrenador.idUsuario)
-    entrenadores: Entrenador[];
-
-    @OneToOne(() => Alumno, alumno => alumno.idUsuario)
-    alumnos: Alumno[];
+  @OneToOne(() => Alumno, (alumno) => alumno.idUsuario)
+  alumnos: Alumno[];
 }
-

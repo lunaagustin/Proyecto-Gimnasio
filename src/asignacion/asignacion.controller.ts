@@ -1,34 +1,57 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  ParseIntPipe,
+  NotFoundException,
+  Put,
+} from '@nestjs/common';
 import { AsignacionService } from './asignacion.service';
 import { CreateAsignacionDto } from './dto/create-asignacion.dto';
 import { UpdateAsignacionDto } from './dto/update-asignacion.dto';
+import { Asignacion } from './entities/asignacion.entity';
 
 @Controller('asignacion')
 export class AsignacionController {
   constructor(private readonly asignacionService: AsignacionService) {}
 
   @Post()
-  create(@Body() createAsignacionDto: CreateAsignacionDto) {
-    return this.asignacionService.create(createAsignacionDto);
+  async create(@Body() Asignacion: CreateAsignacionDto) {
+    return this.asignacionService.createAsignacion(Asignacion);
   }
 
   @Get()
-  findAll() {
-    return this.asignacionService.findAll();
+  async getAsignaciones() {
+    return this.asignacionService.getAsignaciones();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.asignacionService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAsignacionDto: UpdateAsignacionDto) {
-    return this.asignacionService.update(+id, updateAsignacionDto);
+  async getAsignacion(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<Asignacion> {
+    /*con parseIntPipe cambiamos de string a number*/
+    const asignacion = await this.asignacionService.getAsignacion(id);
+    if (!asignacion) {
+      throw new NotFoundException(`Asignacion con id ${id} no se encuentra`);
+    }
+    return asignacion;
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.asignacionService.remove(+id);
+  deleteAsignacion(@Param('id', ParseIntPipe) id: number) {
+    return this.asignacionService.deleteAsignacion(id);
+  }
+
+  @Put(':id')
+  updateAsignacion(
+    @Param('id', ParseIntPipe) id: number,
+    @Body()
+    user: UpdateAsignacionDto,
+  ) {
+    return this.asignacionService.updateAsignacion(id, user);
   }
 }
