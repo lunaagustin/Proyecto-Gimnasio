@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe, HttpStat
 import { RutinaService } from './rutina.service';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
-import { Rutina } from './entities/rutina.entity';
 
 @Controller('rutina')
 export class RutinaController {

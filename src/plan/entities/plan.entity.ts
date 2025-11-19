@@ -13,6 +13,6 @@ export class Plan {
     @Column({ type: "decimal" })
     precio: number;
 
- /*  @OneToMany(() => Alumno, alumno => alumno.idPlan)
-    alumnos: Alumno[];*/
+   @OneToMany(() => Alumno, alumno => alumno.idPlan)
+    alumnos: Alumno[];
 }

@@ -11,6 +11,6 @@ export class CreateEjercicioDto {
     @IsString()
     equipamiento: string;
 
-    /*@IsInt()
-    idEntrenador: number;*/
+    @IsInt()
+    idEntrenador: number;
 }
