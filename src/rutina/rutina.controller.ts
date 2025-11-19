@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { RutinaService } from './rutina.service';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
@@ -8,27 +8,28 @@ export class RutinaController {
   constructor(private readonly rutinaService: RutinaService) {}
 
   @Post()
-  create(@Body() createRutinaDto: CreateRutinaDto) {
-    return this.rutinaService.create(createRutinaDto);
+  async createRutina(@Body() rutina: CreateRutinaDto) {
+    return this.rutinaService.createRutina(rutina);
   }
 
   @Get()
-  findAll() {
-    return this.rutinaService.findAll();
+  async findAllRutinas() {
+    return this.rutinaService.findAllRutinas();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.rutinaService.findOne(+id);
+  async findOneRutina(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),) id: number) {
+    return this.rutinaService.findOneRutina(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRutinaDto: UpdateRutinaDto) {
-    return this.rutinaService.update(+id, updateRutinaDto);
+  @Put(':id')
+  async updateRutina(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),) id: number, 
+  @Body() rutina: UpdateRutinaDto) {
+    return this.rutinaService.updateRutina(+id, rutina);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rutinaService.remove(+id);
+  async deleteRutina(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),) id: number) {
+    return this.rutinaService.deleteRutina(+id);
   }
 }
