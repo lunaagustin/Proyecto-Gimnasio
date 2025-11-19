@@ -22,7 +22,7 @@ export class Alumno {
     @Column({ nullable: true })
     lesiones?: string;
 
-   /* @OneToOne(() => Usuario, usuario => usuario.alumnos)
+    @OneToOne(() => Usuario, usuario => usuario.alumnos)
     @JoinColumn({ name: 'idUsuario' })
     idUsuario: Usuario;
     
@@ -34,7 +34,7 @@ export class Alumno {
     @JoinColumn({ name: 'idPlan' })
     idPlan?: Plan;
 
-    @OneToMany(() => Asignacion, asign => asign.idAlumno)
-    asignaciones: Asignacion[];*/
+    @OneToMany(() => Asignacion, asign => asign.alumno)
+    asignaciones: Asignacion[];
 }
 

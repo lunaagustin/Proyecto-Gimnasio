@@ -4,9 +4,6 @@ import { Repository } from 'typeorm';
 import { Rutina } from './entities/rutina.entity';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { Rutina } from './entities/rutina.entity';
 
 @Injectable()
 export class RutinaService {
@@ -16,24 +13,6 @@ export class RutinaService {
     let rutinas: Rutina[] = await this.rutinaRepository.find();
     return rutinas;
   }
-}
-
-  public async getRutina(id: number) {
-    try {
-      const rutinaEncontrada = await this.rutinaRepository.findOne({
-        where: {
-          idRutina: id,
-        },
-      });
-      if (!rutinaEncontrada) {
-        throw new HttpException('Rutina no encontrada', HttpStatus.NOT_FOUND);
-      }
-      return rutinaEncontrada;
-    } catch (error) {
-      // Si el error ya es un HttpException (como tu 404), relanzalo
-      if (error instanceof HttpException) {
-        throw error;
-      }
 
   public async findOneRutina(id: number): Promise<Rutina> {
     let rutina: Rutina | null = await this.rutinaRepository.findOne({ where: { idRutina: id } });
@@ -73,14 +52,6 @@ export class RutinaService {
       }
     }
   }
-}
-
-  public async updateRutina(id: number, user: UpdateRutinaDto) {
-  try {
-    // Primero verificamos si existe
-    const rutinaExistente = await this.rutinaRepository.findOne({
-      where: { idRutina: id },
-    });
 
   public async deleteRutina(id: number): Promise<boolean> {
     let rutina: Rutina | null = await this.rutinaRepository.findOne({ where: { idRutina: id } });
@@ -95,6 +66,4 @@ export class RutinaService {
       }
     }
   }
-}
-
 }

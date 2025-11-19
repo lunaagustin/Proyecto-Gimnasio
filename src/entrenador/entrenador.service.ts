@@ -13,7 +13,7 @@ export class EntrenadorService {
     private entrenadorRepository: Repository<Entrenador>,
   ) {}
 
-  createEntrenador(Entrenador: CreateEntrenadorDto) {
+  public async createEntrenador(Entrenador: CreateEntrenadorDto): Promise<Entrenador> {
     const newEntrenador = this.entrenadorRepository.create(Entrenador);
     return this.entrenadorRepository.save(newEntrenador);
   }

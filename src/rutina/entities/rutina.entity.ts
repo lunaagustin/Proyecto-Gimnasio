@@ -19,11 +19,11 @@ export class Rutina {
     @JoinColumn({ name: "identrenador" })
     entrenador: Entrenador;
 
-    @OneToMany(() => Asignacion, asignacion => asignacion.idRutina)
+    @OneToMany(() => Asignacion, asignacion => asignacion.rutina)
     asignaciones: Asignacion[];
 
     @ManyToMany(() => Ejercicio, ejercicio => ejercicio.rutinas)
     @JoinTable()   // genera la tabla intermedia
-    ejercicios: Ejercicio[];*/
+    ejercicios: Ejercicio[];
 }
 
