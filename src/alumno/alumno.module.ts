@@ -6,9 +6,10 @@ import { Usuario } from 'src/usuario/entities/usuario.entity';
 import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { Asignacion } from 'src/asignacion/entities/asignacion.entity';
+import { Alumno } from './entities/alumno.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Usuario,Entrenador,Plan,Asignacion])],
+  imports: [TypeOrmModule.forFeature([Alumno,Usuario,Entrenador,Plan,Asignacion])],
   controllers: [AlumnoController],
   providers: [AlumnoService],
 })

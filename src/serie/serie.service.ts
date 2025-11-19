@@ -4,6 +4,9 @@ import { Repository } from 'typeorm';
 import { Serie } from './entities/serie.entity';
 import { CreateSerieDto } from './dto/create-serie.dto';
 import { UpdateSerieDto } from './dto/update-serie.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Serie } from './entities/serie.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class SerieService {
@@ -26,6 +29,24 @@ export class SerieService {
       }
     }
   }
+}
+
+  public async getSerie(id: number) {
+    try {
+      const SerieEncontrado = await this.SerieRepository.findOne({
+        where: {
+          idSerie: id,
+        },
+      });
+      if (!SerieEncontrado) {
+        throw new HttpException('Serie no encontrado', HttpStatus.NOT_FOUND);
+      }
+      return SerieEncontrado;
+    } catch (error) {
+      // Si el error ya es un HttpException (como tu 404), relanzalo
+      if (error instanceof HttpException) {
+        throw error;
+      }
 
   public async createSerie(serie: CreateSerieDto): Promise<Serie> {
     try {
@@ -52,6 +73,14 @@ export class SerieService {
       }
     }
   }
+}
+
+  public async updateSerie(id: number, user: UpdateSerieDto) {
+  try {
+    // Primero verificamos si existe
+    const SerieExistente = await this.SerieRepository.findOne({
+      where: { idSerie: id },
+    });
 
   public async deleteSerie(id: number): Promise<boolean> {
     let serie: Serie | null = await this.serieRepository.findOne({ where: { idSerie: id } });

@@ -15,10 +15,4 @@ export class CreateAlumnoDto {
     @IsOptional()
     lesiones?:string;
 
-    @IsInt()
-    idEntrenador:number;
-
-    @IsInt()
-    idPlan:number;
-
 }

@@ -24,6 +24,6 @@ export class Rutina {
 
     @ManyToMany(() => Ejercicio, ejercicio => ejercicio.rutinas)
     @JoinTable()   // genera la tabla intermedia
-    ejercicios: Ejercicio[];
+    ejercicios: Ejercicio[];*/
 }
 

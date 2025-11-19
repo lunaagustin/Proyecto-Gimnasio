@@ -5,6 +5,6 @@ export class CreateEntrenadorDto {
     @IsString()
     cvCertificacion: string;
 
-    @IsInt()
-    idUsuario: number;
+    /*@IsInt()
+    idUsuario: number;*/
 }

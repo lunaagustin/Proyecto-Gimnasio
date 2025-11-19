@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Put, ParseIntPipe, H
 import { SerieService } from './serie.service';
 import { CreateSerieDto } from './dto/create-serie.dto';
 import { UpdateSerieDto } from './dto/update-serie.dto';
+import {Serie} from './entities/serie.entity'
 
 @Controller('serie')
 export class SerieController {
