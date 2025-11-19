@@ -11,6 +11,6 @@ export class CreateSerieDto {
     @IsInt()
     descanso: number;
 
-    @IsInt()
-    idEjercicio: number;
+   /* @IsInt()
+    idEjercicio: number;*/
 }

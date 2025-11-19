@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn, OneToOne } from "typeorm";
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Entrenador } from "src/entrenador/entities/entrenador.entity";
 import { Plan } from "src/plan/entities/plan.entity";
@@ -20,21 +20,21 @@ export class Alumno {
     fechaInicio: string;
 
     @Column({ nullable: true })
-    lesiones: string;
+    lesiones?: string;
 
-    @ManyToOne(() => Usuario, usuario => usuario.alumnos)
-    @JoinColumn()
+   /* @OneToOne(() => Usuario, usuario => usuario.alumnos)
+    @JoinColumn({ name: 'idUsuario' })
     idUsuario: Usuario;
+    
+    @ManyToOne(() => Entrenador, entrenador => entrenador.alumnos, { nullable: true })
+    @JoinColumn({ name: 'idEntrenador' }, )
+    idEntrenador?: Entrenador;
 
-    @ManyToOne(() => Entrenador, entrenador => entrenador.alumnos)
-    @JoinColumn()
-    idEntrenador: Entrenador;
-
-    @ManyToOne(() => Plan, plan => plan.alumnos)
-    @JoinColumn()
-    idPlan: Plan;
+    @ManyToOne(() => Plan, plan => plan.alumnos, { nullable: true })
+    @JoinColumn({ name: 'idPlan' })
+    idPlan?: Plan;
 
     @OneToMany(() => Asignacion, asign => asign.idAlumno)
-    asignaciones: Asignacion[];
+    asignaciones: Asignacion[];*/
 }
 

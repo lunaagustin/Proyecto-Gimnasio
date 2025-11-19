@@ -8,6 +8,6 @@ export class CreateRutinaDto {
     @IsString()
     descripcion: string;
 
-    @IsInt()
-    idEntrenador: number;
+ /*  @IsInt()
+    idEntrenador: number;*/
 }

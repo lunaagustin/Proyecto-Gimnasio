@@ -8,9 +8,9 @@ export class CreateAsignacionDto {
     @IsString()
     estado: string;
 
-    @IsInt()
+    /*@IsInt()
     idRutina: number;
 
     @IsInt()
-    idAlumno: number;
+    idAlumno: number;*/
 }

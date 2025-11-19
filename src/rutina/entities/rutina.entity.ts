@@ -15,7 +15,7 @@ export class Rutina {
     @Column({ type: 'text' })
     descripcion: string;
 
-    @ManyToOne(() => Entrenador, entrenador => entrenador.rutinas)
+    /*@ManyToOne(() => Entrenador, entrenador => entrenador.rutinas)
     @JoinColumn()
     idEntrenador: Entrenador;
 
@@ -24,6 +24,6 @@ export class Rutina {
 
     @ManyToMany(() => Ejercicio, ejercicio => ejercicio.rutinas)
     @JoinTable()   // genera la tabla intermedia
-    ejercicios: Ejercicio[];
+    ejercicios: Ejercicio[];*/
 }
 
