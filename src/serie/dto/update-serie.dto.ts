@@ -1,4 +1,24 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSerieDto } from './create-serie.dto';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional } from "class-validator";
 
-export class UpdateSerieDto extends PartialType(CreateSerieDto) {}
+
+export class UpdateSerieDto {
+    @IsInt()
+    @IsNotEmpty()
+    @IsOptional()
+    repeticiones?: number;
+
+    @IsNumber()
+    @IsNotEmpty()
+    @IsOptional()
+    peso?: number;
+
+    @IsInt()
+    @IsNotEmpty()
+    @IsOptional()
+    descanso?: number;
+
+    @IsInt()
+    @IsNotEmpty()
+    @IsOptional()
+    idEjercicio?: number;
+}

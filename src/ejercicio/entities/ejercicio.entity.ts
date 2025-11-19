@@ -22,7 +22,7 @@ export class Ejercicio {
     @JoinColumn()
     idEntrenador: Entrenador;
 
-    @OneToMany(() => Serie, serie => serie.idEjercicio)
+    @OneToMany(() => Serie, serie => serie.ejercicio)
     series: Serie[];
 
     @ManyToMany(() => Rutina, rutina => rutina.ejercicios)

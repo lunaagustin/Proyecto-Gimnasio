@@ -1,34 +1,35 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { SerieService } from './serie.service';
 import { CreateSerieDto } from './dto/create-serie.dto';
 import { UpdateSerieDto } from './dto/update-serie.dto';
 
 @Controller('serie')
 export class SerieController {
-  constructor(private readonly serieService: SerieService) {}
+  constructor(private readonly serieService: SerieService) { }
 
   @Post()
-  create(@Body() createSerieDto: CreateSerieDto) {
-    return this.serieService.create(createSerieDto);
+  async createSerie(@Body() serie: CreateSerieDto) {
+    return this.serieService.createSerie(serie);
   }
 
   @Get()
-  findAll() {
-    return this.serieService.findAll();
+  async findAllSeries() {
+    return this.serieService.findAllSeries();
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.serieService.findOne(+id);
+  async findOneSerie(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),) id: number) {
+    return this.serieService.findOneSerie(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateSerieDto: UpdateSerieDto) {
-    return this.serieService.update(+id, updateSerieDto);
+  @Put(':id')
+  async updateSerie(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),) id: number,
+    @Body() serie: UpdateSerieDto) {
+    return this.serieService.updateSerie(+id, serie);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.serieService.remove(+id);
+  async deleteSerie(@Param('id', new ParseIntPipe({ errorHttpStatusCode: HttpStatus.NOT_ACCEPTABLE }),) id: number) {
+    return this.serieService.deleteSerie(+id);
   }
 }

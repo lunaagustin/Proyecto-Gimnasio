@@ -17,6 +17,6 @@ export class Serie {
     descanso: number;
 
     @ManyToOne(() => Ejercicio, ejercicio => ejercicio.series)
-    @JoinColumn()
-    idEjercicio: Ejercicio;
+    @JoinColumn({name: "idejercicio"})
+    ejercicio: Ejercicio;
 }

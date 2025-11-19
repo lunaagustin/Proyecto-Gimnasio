@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe, HttpStatus } from '@nestjs/common';
 import { UsuarioService } from './usuario.service';
 import { CreateUsuarioDto } from './dto/create-usuario.dto';
 import { UpdateUsuarioDto } from './dto/update-usuario.dto';
@@ -14,7 +14,8 @@ export class UsuarioController {
   }
 
   @Put(':id')
-  async updateUsuario(@Param('id') id:number, @Body() usuario:UpdateUsuarioDto):Promise<Usuario>{
+  async updateUsuario(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),)id:number, 
+  @Body() usuario:UpdateUsuarioDto):Promise<Usuario>{
     return this.usuarioService.updateUsuario(id,usuario)
   }
 
@@ -24,12 +25,12 @@ export class UsuarioController {
   }
 
   @Get(':id')
-  async findOneUsuario(@Param('id') id: number) {
+  async findOneUsuario(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),)id: number) {
     return this.usuarioService.findOneUsuario(+id);
   }
 
   @Delete(':id')
-  async deleteUsuario(@Param('id') id: number) {
+  async deleteUsuario(@Param('id',new ParseIntPipe({errorHttpStatusCode:HttpStatus.NOT_ACCEPTABLE}),) id: number) {
     return this.usuarioService.deleteUsuario(+id);
   }
 }
