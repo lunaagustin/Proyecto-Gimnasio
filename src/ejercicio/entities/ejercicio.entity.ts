@@ -18,8 +18,11 @@ export class Ejercicio {
     @Column()
     equipamiento: string;
 
+    @Column({ name: "identrenador" })
+    idEntrenador: number;
+
     @ManyToOne(() => Entrenador, entrenador => entrenador.ejercicios)
-    @JoinColumn()
+    @JoinColumn({ name: "identrenador" })
     entrenador: Entrenador;
 
     @OneToMany(() => Serie, serie => serie.ejercicio)
@@ -28,4 +31,3 @@ export class Ejercicio {
     @ManyToMany(() => Rutina, rutina => rutina.ejercicios)
     rutinas: Rutina[];
 }
-
