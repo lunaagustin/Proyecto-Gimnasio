@@ -18,7 +18,7 @@ import { SerieModule } from './serie/serie.module';
       "host": "localhost",
       "port": 3306,
       "username": "root",
-      "password": "root",
+      "password": "fsql2025",
       "database": "gimnasioo",
       "entities": [
         "dist/**/**.entity{.ts,.js}"

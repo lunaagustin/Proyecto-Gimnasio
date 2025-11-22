@@ -35,8 +35,8 @@ export class Usuario {
   rol: Rol;
 
   @OneToOne(() => Entrenador, (entrenador) => entrenador.usuario)
-  entrenadores: Entrenador[];
+  entrenador: Entrenador;
 
-  @OneToOne(() => Alumno, (alumno) => alumno.idUsuario)
-  alumnos: Alumno[];
+  @OneToOne(() => Alumno, (alumno) => alumno.usuario)
+  alumno: Alumno;
 }

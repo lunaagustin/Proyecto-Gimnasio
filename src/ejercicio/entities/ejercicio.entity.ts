@@ -18,7 +18,7 @@ export class Ejercicio {
     @Column()
     equipamiento: string;
 
-   @ManyToOne(() => Entrenador, entrenador => entrenador.ejercicios)
+    @ManyToOne(() => Entrenador, entrenador => entrenador.ejercicios)
     @JoinColumn()
     entrenador: Entrenador;
 

@@ -7,9 +7,13 @@ import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
 import { Plan } from 'src/plan/entities/plan.entity';
 import { Asignacion } from 'src/asignacion/entities/asignacion.entity';
 import { Alumno } from './entities/alumno.entity';
+import { UsuarioModule } from 'src/usuario/usuario.module';
+import { EntrenadorModule } from 'src/entrenador/entrenador.module';
+import { PlanModule } from 'src/plan/plan.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Alumno,Usuario,Entrenador,Plan,Asignacion])],
+  imports: [TypeOrmModule.forFeature([Alumno,Usuario,Entrenador,Plan,Asignacion]), 
+  UsuarioModule, EntrenadorModule, PlanModule],
   controllers: [AlumnoController],
   providers: [AlumnoService],
 })
