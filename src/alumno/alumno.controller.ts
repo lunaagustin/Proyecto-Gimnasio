@@ -3,7 +3,6 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   ParseIntPipe,
@@ -14,26 +13,21 @@ import { AlumnoService } from './alumno.service';
 import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { Alumno } from './entities/alumno.entity';
-import { get } from 'http';
-import { UsingJoinColumnIsNotAllowedError } from 'typeorm';
-import { identity } from 'rxjs';
+import { CreateUsuarioDto } from 'src/usuario/dto/create-usuario.dto';
+import { CreateEntrenadorDto } from 'src/entrenador/dto/create-entrenador.dto';
+import { CreatePlanDto } from 'src/plan/dto/create-plan.dto';
 
 @Controller('alumno')
 export class AlumnoController {
-  constructor(private readonly alumnoService: AlumnoService) {}
+  constructor(private readonly alumnoService: AlumnoService) { }
 
   @Post()
-  async create(@Body() Alumno: CreateAlumnoDto) {
-    return this.alumnoService.createAlumno(Alumno);
+  async createAlumno(@Body() alumno: CreateAlumnoDto):Promise<Alumno> {
+    return this.alumnoService.createAlumno(alumno);
   }
 
-  /*@Get() 
-  getAlumnos(): Promise<Alumno[]>{
-    return this.alumnoService.getAlumnos();
-  }*/
-
   @Get()
-  async getAlumnos() {
+  async getAlumnos():Promise<Alumno[]> {
     return this.alumnoService.getAlumnos();
   }
 

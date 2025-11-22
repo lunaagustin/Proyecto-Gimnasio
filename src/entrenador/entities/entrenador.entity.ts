@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Usuario } from "src/usuario/entities/usuario.entity";
 import { Alumno } from "src/alumno/entities/alumno.entity";
 import { Rutina } from "src/rutina/entities/rutina.entity";
@@ -13,11 +13,11 @@ export class Entrenador {
     @Column()
     cvCertificacion: string;
 
-   @OneToOne(() => Usuario, usuario => usuario.entrenadores)
-    @JoinColumn()
+    @OneToOne(() => Usuario, usuario => usuario.entrenador)
+    @JoinColumn({ name: "idusuario" })
     usuario: Usuario;
 
-    @OneToMany(() => Alumno, alumno => alumno.idEntrenador)
+    @OneToMany(() => Alumno, alumno => alumno.entrenador)
     alumnos: Alumno[];
 
     @OneToMany(() => Rutina, rutina => rutina.entrenador)

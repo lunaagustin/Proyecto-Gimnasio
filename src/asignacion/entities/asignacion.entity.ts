@@ -13,7 +13,7 @@ export class Asignacion {
 
     @Column()
     estado: string;
-   
+
     @ManyToOne(() => Rutina, rutina => rutina.asignaciones)
     @JoinColumn()
     rutina: Rutina;

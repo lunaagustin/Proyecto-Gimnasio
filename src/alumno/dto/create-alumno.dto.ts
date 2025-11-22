@@ -1,18 +1,29 @@
-import { IsDateString, IsInt, IsNumber, IsOptional, IsString, } from "class-validator";
+import { IsDateString, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, } from "class-validator";
 
 export class CreateAlumnoDto {
 
     @IsNumber()
-    peso:number;
+    peso: number;
 
     @IsNumber()
-    altura:number;
+    altura: number;
 
     @IsDateString()
-    fechaInicio:string;
+    fechaInicio: string;
 
     @IsString()
     @IsOptional()
-    lesiones?:string;
+    lesiones?: string;
 
+    @IsNumber()
+    @IsNotEmpty()
+    idUsuario: number
+
+    @IsInt()
+    @IsNotEmpty()
+    idEntrenador: number
+
+    @IsInt()
+    @IsNotEmpty()
+    idPlan: number
 }

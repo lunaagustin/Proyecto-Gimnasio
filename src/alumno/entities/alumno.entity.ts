@@ -22,19 +22,27 @@ export class Alumno {
     @Column({ nullable: true })
     lesiones?: string;
 
-    @OneToOne(() => Usuario, usuario => usuario.alumnos)
-    @JoinColumn({ name: 'idUsuario' })
-    idUsuario: Usuario;
-    
-    @ManyToOne(() => Entrenador, entrenador => entrenador.alumnos, { nullable: true })
-    @JoinColumn({ name: 'idEntrenador' }, )
-    idEntrenador?: Entrenador;
+    @Column({ name: 'idusuario' })
+    idUsuario: number;
 
-    @ManyToOne(() => Plan, plan => plan.alumnos, { nullable: true })
-    @JoinColumn({ name: 'idPlan' })
-    idPlan?: Plan;
+    @OneToOne(() => Usuario, usuario => usuario.alumno)
+    @JoinColumn({ name: 'idusuario' })
+    usuario: Usuario;
+
+    @Column({ name: 'identrenador' })
+    idEntrenador: number;
+
+    @ManyToOne(() => Entrenador, entrenador => entrenador.alumnos)
+    @JoinColumn({ name: 'identrenador' })
+    entrenador: Entrenador;
+
+    @Column({ name: 'idplan' })
+    idPlan: number;
+
+    @ManyToOne(() => Plan, plan => plan.alumnos)
+    @JoinColumn({ name: 'idplan' })
+    plan: Plan;
 
     @OneToMany(() => Asignacion, asign => asign.alumno)
     asignaciones: Asignacion[];
 }
-

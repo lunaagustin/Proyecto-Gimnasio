@@ -12,5 +12,6 @@ import { Entrenador } from './entities/entrenador.entity';
   imports: [TypeOrmModule.forFeature([Entrenador,Usuario,Alumno,Rutina,Ejercicio])], /*entidades que voy a estar utilizando*/
   controllers: [EntrenadorController],
   providers: [EntrenadorService],
+  exports: [EntrenadorService]
 })
 export class EntrenadorModule {}
