@@ -4,18 +4,30 @@ import { Repository } from 'typeorm';
 import { Serie } from './entities/serie.entity';
 import { CreateSerieDto } from './dto/create-serie.dto';
 import { UpdateSerieDto } from './dto/update-serie.dto';
+import { EjercicioService } from 'src/ejercicio/ejercicio.service';
+import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
 
 @Injectable()
 export class SerieService {
-  constructor(@InjectRepository(Serie) private readonly serieRepository: Repository<Serie>,) { }
+  constructor(@InjectRepository(Serie) 
+  private readonly serieRepository: Repository<Serie>,
+  private readonly ejercicioService: EjercicioService,
+) { }
 
   public async findAllSeries(): Promise<Serie[]> {
-    let series: Serie[] = await this.serieRepository.find();
+    let series: Serie[] = await this.serieRepository.find({
+      relations: ['ejercicio'],
+    });
     return series;
   }
 
   public async findOneSerie(id: number): Promise<Serie> {
-    let serie: Serie | null = await this.serieRepository.findOne({ where: { idSerie: id } });
+    let serie: Serie | null = await this.serieRepository.findOne({
+      where: {
+        idSerie: id,
+      },
+      relations: ['ejercicio'],
+    });
     if (!serie) {
       throw new NotFoundException("La serie no se encuentra");
     } else {
@@ -29,6 +41,7 @@ export class SerieService {
 
   public async createSerie(serie: CreateSerieDto): Promise<Serie> {
     try {
+      let ejercicio: Ejercicio | null = await this.ejercicioService.getEjercicio(serie.idEjercicio);
       let nuevaSerie: Serie = await this.serieRepository.create(serie);
       return await this.serieRepository.save(nuevaSerie);
     } catch (error) {

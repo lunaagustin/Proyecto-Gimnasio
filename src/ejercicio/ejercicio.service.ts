@@ -4,37 +4,39 @@ import { UpdateEjercicioDto } from './dto/update-ejercicio.dto';
 import { Ejercicio } from './entities/ejercicio.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { EntrenadorService } from 'src/entrenador/entrenador.service';
+import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
 
 @Injectable()
 export class EjercicioService {
   constructor(
     @InjectRepository(Ejercicio)
     private readonly ejercicioRepository: Repository<Ejercicio>,
-  ) {} /* decorador Inject le pasamos la entity*/
+    private readonly entrenadorService: EntrenadorService,
+  ) { } /* decorador Inject le pasamos la entity*/
 
- 
   public async createEjercicio(ejercicio: CreateEjercicioDto): Promise<Ejercicio> {
-        try {
-          let buscarEjercicio: Ejercicio | null = await this.ejercicioRepository.findOneBy({ nombre: ejercicio.nombre, });
-          if (buscarEjercicio) {
-            throw new BadRequestException('Ya existe un ejercicio con ese nombre');
-          } else {
-            let nuevoEjercicio: Ejercicio = await this.ejercicioRepository.create(ejercicio);
-            return await this.ejercicioRepository.save(nuevoEjercicio);
-          }
-        } catch (error) {
-          throw new HttpException({
-            status: HttpStatus.BAD_REQUEST,
-            error: 'Error al crear ejercicio nuevo' + error
-          }, HttpStatus.BAD_REQUEST);
-        }
+    try {
+      let buscarEjercicio: Ejercicio | null = await this.ejercicioRepository.findOneBy({ nombre: ejercicio.nombre, });
+      if (buscarEjercicio) {
+        throw new BadRequestException('Ya existe un ejercicio con ese nombre');
       }
-  
+      let entrenadorEncontrado: Entrenador | null = await this.entrenadorService.getEntrenador(ejercicio.idEntrenador);
+      let nuevoEjercicio: Ejercicio = this.ejercicioRepository.create(ejercicio);
+      return await this.ejercicioRepository.save(nuevoEjercicio);
+    } catch (error) {
+      throw new HttpException({
+        status: HttpStatus.INTERNAL_SERVER_ERROR,
+        error: 'Error interno al crear ejercicio nuevo' + error
+      }, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 
   public async getEjercicios(): Promise<Ejercicio[]> {
     try {
-      const ejercicios = await this.ejercicioRepository.find();
-
+      const ejercicios = await this.ejercicioRepository.find({
+        relations: ['entrenador'],
+      });
       if (ejercicios.length === 0) {
         throw new HttpException(
           'No hay ejercicios registrados',
@@ -61,6 +63,7 @@ export class EjercicioService {
         where: {
           idEjercicio: id,
         },
+        relations: ['entrenador'],
       });
       if (!ejercicioEncontrado) {
         throw new HttpException(
