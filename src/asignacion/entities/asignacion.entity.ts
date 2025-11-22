@@ -15,10 +15,10 @@ export class Asignacion {
     estado: string;
 
     @ManyToOne(() => Rutina, rutina => rutina.asignaciones)
-    @JoinColumn()
+    @JoinColumn({ name: 'idRutina' })
     rutina: Rutina;
 
     @ManyToOne(() => Alumno, alumno => alumno.asignaciones)
-    @JoinColumn()
+    @JoinColumn({ name: 'idAlumno' })
     alumno: Alumno;
 }
