@@ -12,10 +12,14 @@ export class Entrenador {
 
     @Column()
     cvCertificacion: string;
+    
+    @Column({name: "idusuario"})
+    idUsuario: number; 
 
     @OneToOne(() => Usuario, usuario => usuario.entrenador)
     @JoinColumn({ name: "idusuario" })
     usuario: Usuario;
+
 
     @OneToMany(() => Alumno, alumno => alumno.entrenador)
     alumnos: Alumno[];

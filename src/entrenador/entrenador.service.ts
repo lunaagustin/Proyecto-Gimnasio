@@ -1,26 +1,55 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateEntrenadorDto } from './dto/create-entrenador.dto';
 import { UpdateEntrenadorDto } from './dto/update-entrenador.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Entrenador } from './entities/entrenador.entity';
 import { Repository } from 'typeorm';
 import { privateDecrypt } from 'crypto';
+import { Usuario } from 'src/usuario/entities/usuario.entity';
+import { UsuarioService } from 'src/usuario/usuario.service';
 
 @Injectable()
 export class EntrenadorService {
   constructor(
     @InjectRepository(Entrenador)
     private entrenadorRepository: Repository<Entrenador>,
+    private readonly usuarioService: UsuarioService,
   ) {}
 
-  public async createEntrenador(Entrenador: CreateEntrenadorDto): Promise<Entrenador> {
-    const newEntrenador = this.entrenadorRepository.create(Entrenador);
-    return this.entrenadorRepository.save(newEntrenador);
+  public async createEntrenador(
+    Entrenador: CreateEntrenadorDto,
+  ): Promise<Entrenador> {
+    const usuarioEncontrado: Usuario | null =
+      await this.usuarioService.findOneUsuario(Entrenador.idUsuario);
+    if (usuarioEncontrado.rol !== 'entrenador') {
+      throw new BadRequestException(
+        `El usuario no puede ser registrado como entrenador.`,
+      );
+    } else {
+      try {
+        const nuevoEntrenador = this.entrenadorRepository.create(Entrenador);
+        const entrenadorGuardado =
+          this.entrenadorRepository.save(nuevoEntrenador);
+        return entrenadorGuardado;
+      } catch (error) {
+        throw new InternalServerErrorException(
+          'Error interno al crear un entrenador',
+        );
+      }
+    }
   }
 
   public async getEntrenadores(): Promise<Entrenador[]> {
     try {
-      const entrenadores = await this.entrenadorRepository.find();
+      const entrenadores = await this.entrenadorRepository.find({
+        relations: ['usuario'],
+      });
 
       if (entrenadores.length === 0) {
         throw new HttpException(
@@ -48,6 +77,7 @@ export class EntrenadorService {
         where: {
           idEntrenador: id,
         },
+        relations: ['usuario'],
       });
       if (!entrenadorEncontrado) {
         throw new HttpException(
