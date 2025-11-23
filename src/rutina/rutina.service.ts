@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  HttpException,
+  HttpStatus,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -10,23 +12,47 @@ import { Rutina } from './entities/rutina.entity';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
 import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
+import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
 
 @Injectable()
 export class RutinaService {
-
   constructor(
     @InjectRepository(Rutina)
     private readonly rutinaRepository: Repository<Rutina>,
 
     @InjectRepository(Entrenador)
     private readonly entrenadorRepository: Repository<Entrenador>,
+
+    @InjectRepository(Ejercicio)
+    private readonly ejercicioRepository: Repository<Ejercicio>,
   ) {}
 
+
   public async findAllRutinas(): Promise<Rutina[]> {
-    const rutinas = await this.rutinaRepository.find({
-      relations: ['entrenador'],
-    });
-    return rutinas;
+    try {
+      const rutinas = await this.rutinaRepository.find({
+        relations: ['entrenador'],
+      });
+
+      if (rutinas.length === 0) {
+        throw new HttpException(
+          'No hay rutinas registradas',
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      return rutinas;
+
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new HttpException(
+        'Error interno al obtener rutinas',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   public async findOneRutina(id: number): Promise<Rutina> {
@@ -74,6 +100,31 @@ export class RutinaService {
         'Error interno al crear la rutina.',
       );
     }
+  }
+
+  public async agregarEjercicios(idRutina: number, ids: number[]) {
+    // 1. Verificar que la rutina exista
+    const rutina = await this.rutinaRepository.findOne({
+      where: { idRutina },
+      relations: ['ejercicios'], // 👈 importante para que traiga ejercicios actuales
+    });
+
+    if (!rutina) {
+      throw new NotFoundException('Rutina no encontrada');
+    }
+
+    // 2. Buscar los ejercicios por los IDs recibidos
+    const ejercicios = await this.ejercicioRepository.findByIds(ids);
+
+    if (ejercicios.length !== ids.length) {
+      throw new BadRequestException('Uno o más ejercicios no existen');
+    }
+
+    // 3. Agregar ejercicios a la rutina
+    rutina.ejercicios = [...rutina.ejercicios, ...ejercicios];
+
+    // 4. Guardar rutina actualizada
+    return await this.rutinaRepository.save(rutina);
   }
 
   public async updateRutina(
