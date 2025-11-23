@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Usuario } from './entities/usuario.entity';
@@ -9,10 +9,29 @@ import { UpdateUsuarioDto } from './dto/update-usuario.dto';
 export class UsuarioService {
   constructor(@InjectRepository(Usuario) private readonly usuarioRepository: Repository<Usuario>,) { }
 
-  public async findAllUsuarios(): Promise<Usuario[]> {
-    let usuarios: Usuario[] = await this.usuarioRepository.find();
-    return usuarios;
-  }
+
+    public async findAllUsuarios(): Promise<Usuario[]> {
+      try {
+        
+        const usuarios: Usuario[] = await this.usuarioRepository.find();
+  
+        if (usuarios.length === 0) {
+          throw new HttpException('No hay usuarios registrados', HttpStatus.NOT_FOUND);
+        }
+  
+        return usuarios;
+  
+      } catch (error) {
+        if (error instanceof HttpException) {
+          throw error;
+        }
+  
+        throw new HttpException(
+          'Error interno al obtener usuarios',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
 
   public async findOneUsuario(id: number): Promise<Usuario> {
     let usuario: Usuario | null = await this.usuarioRepository.findOne({ where: { idUsuario: id } });

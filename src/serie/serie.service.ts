@@ -1,4 +1,4 @@
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Serie } from './entities/serie.entity';
@@ -15,11 +15,26 @@ export class SerieService {
 ) { }
 
   public async findAllSeries(): Promise<Serie[]> {
-    let series: Serie[] = await this.serieRepository.find({
-      relations: ['ejercicio'],
-    });
-    return series;
-  }
+      try {
+        const series: Serie[] = await this.serieRepository.find({ relations: ['ejercicio'] });
+  
+        if (series.length === 0) {
+          throw new HttpException('No hay series registradas', HttpStatus.NOT_FOUND);
+        }
+  
+        return series;
+  
+      } catch (error) {
+        if (error instanceof HttpException) {
+          throw error;
+        }
+  
+        throw new HttpException(
+          'Error interno al obtener series',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
 
   public async findOneSerie(id: number): Promise<Serie> {
     let serie: Serie | null = await this.serieRepository.findOne({
