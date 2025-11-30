@@ -10,6 +10,7 @@ import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
 @Injectable()
 export class EjercicioService {
   constructor(
+    
     @InjectRepository(Ejercicio)
     private readonly ejercicioRepository: Repository<Ejercicio>,
     private readonly entrenadorService: EntrenadorService,
@@ -86,32 +87,44 @@ export class EjercicioService {
     }
   }
 
+
+
   public async deleteEjercicio(id: number) {
-    try {
-      const result = await this.ejercicioRepository.delete(id);
+  try {
+    // 1️⃣ Buscar ejercicio con las relaciones de rutinas
+    const ejercicio = await this.ejercicioRepository.findOne({
+      where: { idEjercicio: id },
+      relations: ['rutinas'],
+    });
 
-      // Si no eliminó ninguna fila → ejercicio no existe
-      if (result.affected === 0) {
-        throw new HttpException(
-          `Ejercicio con ID ${id} no encontrado`,
-          HttpStatus.NOT_FOUND,
-        );
-      }
-
-      return {
-        message: `Ejercicio con ID ${id} eliminado correctamente`,
-      };
-    } catch (error) {
-      if (error instanceof HttpException) {
-        throw error;
-      }
-
+    if (!ejercicio) {
       throw new HttpException(
-        `Error al eliminar el ejercicio con ID ${id}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
+        `Ejercicio con ID ${id} no encontrado`,
+        HttpStatus.NOT_FOUND,
       );
     }
+
+    // 2️⃣ Vaciar la relación ManyToMany con rutinas
+    ejercicio.rutinas = [];
+    await this.ejercicioRepository.save(ejercicio);
+
+    // 3️⃣ Finalmente eliminar el ejercicio
+    await this.ejercicioRepository.delete(id);
+
+    return {
+      message: `Ejercicio con ID ${id} eliminado correctamente`,
+    };
+  } catch (error) {
+    if (error instanceof HttpException) throw error;
+
+    console.error(error);
+    throw new HttpException(
+      `Error al eliminar el ejercicio con ID ${id}`,
+      HttpStatus.INTERNAL_SERVER_ERROR,
+    );
   }
+}
+
 
   public async updateEjercicio(id: number, user: UpdateEjercicioDto) {
     try {
