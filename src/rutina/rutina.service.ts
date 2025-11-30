@@ -13,6 +13,7 @@ import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
 import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
 import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
+import { Asignacion } from 'src/asignacion/entities/asignacion.entity';
 
 @Injectable()
 export class RutinaService {
@@ -25,13 +26,17 @@ export class RutinaService {
 
     @InjectRepository(Ejercicio)
     private readonly ejercicioRepository: Repository<Ejercicio>,
+
+    @InjectRepository(Asignacion)
+private readonly asignacionRepository: Repository<Asignacion>,
+
   ) {}
 
 
   public async findAllRutinas(): Promise<Rutina[]> {
     try {
       const rutinas = await this.rutinaRepository.find({
-        relations: ['entrenador'],
+        relations: ['entrenador', 'ejercicios'],
       });
 
       if (rutinas.length === 0) {
@@ -58,6 +63,7 @@ export class RutinaService {
   public async findOneRutina(id: number): Promise<Rutina> {
     let rutina: Rutina | null = await this.rutinaRepository.findOne({
       where: { idRutina: id },
+      relations: ['entrenador', 'ejercicios'],
     });
     if (!rutina) {
       throw new NotFoundException('La rutina no se encuentra');
@@ -151,21 +157,35 @@ export class RutinaService {
     }
   }
 
-  public async deleteRutina(id: number): Promise<boolean> {
-    let rutina: Rutina | null = await this.rutinaRepository.findOne({
-      where: { idRutina: id },
-    });
-    if (!rutina) {
-      throw new NotFoundException('No se encuentra la rutina');
-    } else {
-      try {
-        await this.rutinaRepository.delete(rutina.idRutina);
-        return true;
-      } catch (error) {
-        throw new InternalServerErrorException(
-          'Error interno al borrar la rutina.',
-        );
-      }
+public async deleteRutina(id: number): Promise<boolean> {
+  const rutina = await this.rutinaRepository.findOne({
+    where: { idRutina: id },
+    relations: ['ejercicios', 'asignaciones'], 
+  });
+
+  if (!rutina) throw new NotFoundException('No se encuentra la rutina');
+
+  try {
+    // 1️⃣ Vaciar relación ManyToMany con ejercicios
+    rutina.ejercicios = [];
+    await this.rutinaRepository.save(rutina);
+
+    // 2️⃣ Eliminar asignaciones relacionadas (OneToMany)
+    if (rutina.asignaciones.length > 0) {
+      const asignacionesIds = rutina.asignaciones.map(a => a.idAsignacion);
+      await this.asignacionRepository.delete(asignacionesIds);
     }
+
+    // 3️⃣ Finalmente borrar la rutina
+    await this.rutinaRepository.delete(rutina.idRutina);
+
+    return true;
+  } catch (error) {
+    console.error(error);
+    throw new InternalServerErrorException(
+      'Error interno al borrar la rutina.',
+    );
   }
+}
+
 }
