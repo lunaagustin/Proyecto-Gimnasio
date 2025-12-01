@@ -8,9 +8,9 @@ import {
   JoinTable,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
-import { Asignacion } from 'src/asignacion/entities/asignacion.entity';
-import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
+import { Entrenador } from '../../entrenador/entities/entrenador.entity';
+import { Asignacion } from '../../asignacion/entities/asignacion.entity';
+import { Ejercicio } from '../../ejercicio/entities/ejercicio.entity';
 
 @Entity('rutina')
 export class Rutina {

@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, OneToMany, JoinColumn, PrimaryGeneratedColumn, OneToOne } from "typeorm";
-import { Usuario } from "src/usuario/entities/usuario.entity";
-import { Entrenador } from "src/entrenador/entities/entrenador.entity";
-import { Plan } from "src/plan/entities/plan.entity";
-import { Asignacion } from "src/asignacion/entities/asignacion.entity";
+import { Usuario } from "../../usuario/entities/usuario.entity";
+import { Entrenador } from "../../entrenador/entities/entrenador.entity";
+import { Plan } from "../../plan/entities/plan.entity";
+import { Asignacion } from "../../asignacion/entities/asignacion.entity";
 
 @Entity('alumno')
 export class Alumno {
