@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { EntrenadorService } from './entrenador.service';
 import { EntrenadorController } from './entrenador.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Usuario } from 'src/usuario/entities/usuario.entity';
-import { Alumno } from 'src/alumno/entities/alumno.entity';
-import { Rutina } from 'src/rutina/entities/rutina.entity';
-import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
-import { Entrenador } from './entities/entrenador.entity';
+import { Usuario } from '../usuario/entities/usuario.entity';
+import { Alumno } from '../alumno/entities/alumno.entity';
+import { Rutina } from '../rutina/entities/rutina.entity';
+import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
+import { Entrenador } from '../entrenador/entities/entrenador.entity';
 import { UsuarioModule } from 'src/usuario/usuario.module';
 
 @Module({

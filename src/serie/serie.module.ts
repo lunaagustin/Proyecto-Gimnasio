@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { SerieService } from './serie.service';
 import { SerieController } from './serie.controller';
-import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
+import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Serie } from './entities/serie.entity';
+import { Serie } from '../serie/entities/serie.entity';
 import { EjercicioModule } from 'src/ejercicio/ejercicio.module';
 
 @Module({
