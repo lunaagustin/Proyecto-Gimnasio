@@ -18,7 +18,7 @@ import { SerieModule } from './serie/serie.module';
       "host": process.env.MYSQL_HOST,
       "port": parseInt(process.env.MYSQL_PORT ?? "3306"),
       "username": process.env.MYSQL_USER,
-      "password": process.env.MYSQL_PASSSWORD,
+      "password": process.env.MYSQL_PASSWORD,
       "database": process.env.MYSQL_DB,
       "entities": [
         __dirname + "/**/**.entity{js,ts}"
