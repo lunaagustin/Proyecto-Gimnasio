@@ -15,7 +15,7 @@ import { SerieModule } from './serie/serie.module';
   imports: [
     TypeOrmModule.forRoot({
       "type": "mysql",
-      "host": "process.env.MYSQL_HOST",
+      "host": process.env.MYSQL_HOST,
       "port": parseInt(process.env.MYSQL_PORT ?? "3306"),
       "username": process.env.MYSQL_USER,
       "password": process.env.MYSQL_PASSSWORD,
