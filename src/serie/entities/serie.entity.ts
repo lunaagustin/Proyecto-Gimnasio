@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Ejercicio } from "src/ejercicio/entities/ejercicio.entity";
+import { Ejercicio } from "../../ejercicio/entities/ejercicio.entity";
 
 @Entity('serie')
 export class Serie {

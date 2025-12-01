@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Entrenador } from "src/entrenador/entities/entrenador.entity";
-import { Serie } from "src/serie/entities/serie.entity";
-import { Rutina } from "src/rutina/entities/rutina.entity";
+import { Entrenador } from "../../entrenador/entities/entrenador.entity";
+import { Serie } from "../../serie/entities/serie.entity";
+import { Rutina } from "../../rutina/entities/rutina.entity";
 
 @Entity('ejercicio')
 export class Ejercicio {

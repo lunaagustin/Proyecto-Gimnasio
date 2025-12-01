@@ -1,6 +1,6 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Rutina } from "src/rutina/entities/rutina.entity";
-import { Alumno } from "src/alumno/entities/alumno.entity";
+import { Rutina } from "../../rutina/entities/rutina.entity";
+import { Alumno } from "../../alumno/entities/alumno.entity";
 
 @Entity('asignacion')
 export class Asignacion {

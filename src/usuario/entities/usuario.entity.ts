@@ -5,8 +5,8 @@ import {
   OneToMany,
   OneToOne,
 } from 'typeorm';
-import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
-import { Alumno } from 'src/alumno/entities/alumno.entity';
+import { Entrenador } from '../../entrenador/entities/entrenador.entity';
+import { Alumno } from '../../alumno/entities/alumno.entity';
 
 export enum Rol {
   ALUMNO = 'alumno',
