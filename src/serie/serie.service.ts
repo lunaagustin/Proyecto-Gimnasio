@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Serie } from './entities/serie.entity';
+import { Serie } from '../serie/entities/serie.entity';
 import { CreateSerieDto } from './dto/create-serie.dto';
 import { UpdateSerieDto } from './dto/update-serie.dto';
-import { EjercicioService } from 'src/ejercicio/ejercicio.service';
-import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
+import { EjercicioService } from '../ejercicio/ejercicio.service';
+import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
 
 @Injectable()
 export class SerieService {

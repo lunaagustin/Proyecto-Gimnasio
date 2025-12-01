@@ -8,12 +8,12 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Rutina } from './entities/rutina.entity';
+import { Rutina } from '../rutina/entities/rutina.entity';
 import { CreateRutinaDto } from './dto/create-rutina.dto';
 import { UpdateRutinaDto } from './dto/update-rutina.dto';
-import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
-import { Ejercicio } from 'src/ejercicio/entities/ejercicio.entity';
-import { Asignacion } from 'src/asignacion/entities/asignacion.entity';
+import { Entrenador } from '../entrenador/entities/entrenador.entity';
+import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
+import { Asignacion } from '../asignacion/entities/asignacion.entity';
 
 @Injectable()
 export class RutinaService {

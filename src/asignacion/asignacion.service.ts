@@ -4,8 +4,8 @@ import { UpdateAsignacionDto } from './dto/update-asignacion.dto';
 import { Asignacion } from './entities/asignacion.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Rutina } from 'src/rutina/entities/rutina.entity';
-import { Alumno } from 'src/alumno/entities/alumno.entity';
+import { Rutina } from '../rutina/entities/rutina.entity';
+import { Alumno } from '../alumno/entities/alumno.entity';
 
 @Injectable()
 export class AsignacionService {

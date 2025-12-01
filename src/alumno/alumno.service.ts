@@ -3,13 +3,13 @@ import { CreateAlumnoDto } from './dto/create-alumno.dto';
 import { UpdateAlumnoDto } from './dto/update-alumno.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Alumno } from './entities/alumno.entity';
-import { Usuario } from 'src/usuario/entities/usuario.entity';
-import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
-import { Plan } from 'src/plan/entities/plan.entity';
-import { UsuarioService } from 'src/usuario/usuario.service';
-import { EntrenadorService } from 'src/entrenador/entrenador.service';
-import { PlanService } from 'src/plan/plan.service';
+import { Alumno } from '../alumno/entities/alumno.entity';
+import { Usuario } from '../usuario/entities/usuario.entity';
+import { Entrenador } from '../entrenador/entities/entrenador.entity';
+import { Plan } from '../plan/entities/plan.entity';
+import { UsuarioService } from '../usuario/usuario.service';
+import { EntrenadorService } from '../entrenador/entrenador.service';
+import { PlanService } from '../plan/plan.service';
 
 @Injectable()
 export class AlumnoService {
