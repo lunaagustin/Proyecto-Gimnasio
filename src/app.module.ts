@@ -15,15 +15,15 @@ import { SerieModule } from './serie/serie.module';
   imports: [
     TypeOrmModule.forRoot({
       "type": "mysql",
-      "host": "localhost",
-      "port": 3306,
-      "username": "root",
-      "password": "root",
-      "database": "gimnasioo",
+      "host": "process.env.MYSQL_HOST",
+      "port": parseInt(process.env.MYSQL_PORT ?? "3306"),
+      "username": process.env.MYSQL_USER,
+      "password": process.env.MYSQL_PASSSWORD,
+      "database": process.env.MYSQL_DB,
       "entities": [
-        "dist/**/**.entity{.ts,.js}"
+        __dirname + "/**/**.entity{js,ts}"
       ],
-      "synchronize": false
+      "synchronize": true
     }),
     UsuarioModule,
     AlumnoModule,
