@@ -1,11 +1,11 @@
 import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateEjercicioDto } from './dto/create-ejercicio.dto';
 import { UpdateEjercicioDto } from './dto/update-ejercicio.dto';
-import { Ejercicio } from './entities/ejercicio.entity';
+import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { EntrenadorService } from 'src/entrenador/entrenador.service';
-import { Entrenador } from 'src/entrenador/entities/entrenador.entity';
+import { EntrenadorService } from '../entrenador/entrenador.service';
+import { Entrenador } from '../entrenador/entities/entrenador.entity';
 
 @Injectable()
 export class EjercicioService {

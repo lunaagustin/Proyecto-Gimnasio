@@ -8,11 +8,10 @@ import {
 import { CreateEntrenadorDto } from './dto/create-entrenador.dto';
 import { UpdateEntrenadorDto } from './dto/update-entrenador.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Entrenador } from './entities/entrenador.entity';
+import { Entrenador } from '../entrenador/entities/entrenador.entity';
 import { Repository } from 'typeorm';
-import { privateDecrypt } from 'crypto';
-import { Usuario } from 'src/usuario/entities/usuario.entity';
-import { UsuarioService } from 'src/usuario/usuario.service';
+import { Usuario } from '../usuario/entities/usuario.entity';
+import { UsuarioService } from '../usuario/usuario.service';
 
 @Injectable()
 export class EntrenadorService {
