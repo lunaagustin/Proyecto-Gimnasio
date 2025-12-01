@@ -7,9 +7,9 @@ import { Entrenador } from '../entrenador/entities/entrenador.entity';
 import { Plan } from '../plan/entities/plan.entity';
 import { Asignacion } from '../asignacion/entities/asignacion.entity';
 import { Alumno } from '../alumno/entities/alumno.entity';
-import { UsuarioModule } from 'src/usuario/usuario.module';
-import { EntrenadorModule } from 'src/entrenador/entrenador.module';
-import { PlanModule } from 'src/plan/plan.module';
+import { UsuarioModule } from '../usuario/usuario.module';
+import { EntrenadorModule } from '../entrenador/entrenador.module';
+import { PlanModule } from '../plan/plan.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Alumno,Usuario,Entrenador,Plan,Asignacion]), 

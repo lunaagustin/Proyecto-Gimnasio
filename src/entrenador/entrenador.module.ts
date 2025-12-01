@@ -7,7 +7,7 @@ import { Alumno } from '../alumno/entities/alumno.entity';
 import { Rutina } from '../rutina/entities/rutina.entity';
 import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
 import { Entrenador } from '../entrenador/entities/entrenador.entity';
-import { UsuarioModule } from 'src/usuario/usuario.module';
+import { UsuarioModule } from '../usuario/usuario.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Entrenador,Usuario,Alumno,Rutina,Ejercicio]), UsuarioModule], /*entidades que voy a estar utilizando*/

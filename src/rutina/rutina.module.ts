@@ -6,8 +6,8 @@ import { Asignacion } from '../asignacion/entities/asignacion.entity';
 import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Rutina } from '../rutina/entities/rutina.entity';
-import { EntrenadorModule } from 'src/entrenador/entrenador.module';
-import { UsuarioModule } from 'src/usuario/usuario.module';
+import { EntrenadorModule } from '../entrenador/entrenador.module';
+import { UsuarioModule } from '../usuario/usuario.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Rutina,Entrenador,Asignacion,Ejercicio]),UsuarioModule, EntrenadorModule],

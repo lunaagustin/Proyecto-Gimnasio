@@ -6,7 +6,7 @@ import { Entrenador } from '../entrenador/entities/entrenador.entity';
 import { Serie } from '../serie/entities/serie.entity';
 import { Rutina } from '../rutina/entities/rutina.entity';
 import { Ejercicio } from '../ejercicio/entities/ejercicio.entity';
-import { EntrenadorModule } from 'src/entrenador/entrenador.module';
+import { EntrenadorModule } from '../entrenador/entrenador.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Ejercicio,Entrenador,Serie,Rutina]), EntrenadorModule],
