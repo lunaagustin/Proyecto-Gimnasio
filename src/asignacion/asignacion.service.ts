@@ -13,68 +13,70 @@ export class AsignacionService {
     @InjectRepository(Asignacion)
     private readonly asignacionRepository: Repository<Asignacion>,
 
-     @InjectRepository(Rutina)
+    @InjectRepository(Rutina)
     private readonly rutinaRepository: Repository<Rutina>,
-     
+
     @InjectRepository(Alumno)
     private readonly alumnoRepository: Repository<Alumno>,
 
-  ) {} /* decorador Inject le pasamos la entity*/
+  ) { } /* decorador Inject le pasamos la entity*/
 
 
-async createAsignacion(dto: CreateAsignacionDto): Promise<Asignacion> {
-  const { fechaAsignada, estado, idRutina, idAlumno } = dto;
+  async createAsignacion(dto: CreateAsignacionDto): Promise<Asignacion> {
+    const { fechaAsignada, estado, idRutina, idAlumno } = dto;
 
-  // Buscar rutina
-  const rutina = await this.rutinaRepository.findOne({ where: { idRutina } });
-  if (!rutina) {
-    throw new NotFoundException('Rutina no encontrada');
-  }
+    // Buscar rutina
+    const rutina = await this.rutinaRepository.findOne({ where: { idRutina } });
+    if (!rutina) {
+      throw new NotFoundException('Rutina no encontrada');
+    }
 
-  // Buscar alumno
-  const alumno = await this.alumnoRepository.findOne({ where: { idAlumno } });
-  if (!alumno) {
-    throw new NotFoundException('Alumno no encontrado');
-  }
+    // Buscar alumno
+    const alumno = await this.alumnoRepository.findOne({ where: { idAlumno } });
+    if (!alumno) {
+      throw new NotFoundException('Alumno no encontrado');
+    }
 
-  // Crear asignación
-  const asignacion = this.asignacionRepository.create({
-    fechaAsignada,
-    estado,
-    rutina, //pasa el objeto entero de rutina
-    alumno, //pasa el objeto entero de alumno (el id completo)
-  });
-
-  return await this.asignacionRepository.save(asignacion); //lo guarda en la base de datos
-}
-
-
-public async getAsignaciones(): Promise<Asignacion[]> {
-  try {
-    const asignaciones = await this.asignacionRepository.find({
-      relations: {
-        alumno: true,
-        rutina: true,
-      },
+    // Crear asignación
+    const asignacion = this.asignacionRepository.create({
+      fechaAsignada,
+      estado,
+      rutina, //pasa el objeto entero de rutina
+      alumno, //pasa el objeto entero de alumno (el id completo)
     });
 
-    if (asignaciones.length === 0) {
-      throw new HttpException('No hay asignaciones', HttpStatus.NOT_FOUND);
-    }
-
-    return asignaciones;
-
-  } catch (error) {
-    if (error instanceof HttpException) {
-      throw error;
-    }
-
-    throw new HttpException(
-      'Error interno al obtener asignaciones',
-      HttpStatus.INTERNAL_SERVER_ERROR,
-    );
+    return await this.asignacionRepository.save(asignacion); //lo guarda en la base de datos
   }
-}
+
+
+  public async getAsignaciones(): Promise<Asignacion[]> {
+    try {
+      const asignaciones = await this.asignacionRepository.find({
+        relations: [
+          'alumno',
+          'rutina',
+          'rutina.ejercicios',
+          'rutina.ejercicios.series' 
+        ],
+      });
+
+      if (asignaciones.length === 0) {
+        throw new HttpException('No hay asignaciones', HttpStatus.NOT_FOUND);
+      }
+
+      return asignaciones;
+
+    } catch (error) {
+      if (error instanceof HttpException) {
+        throw error;
+      }
+
+      throw new HttpException(
+        'Error interno al obtener asignaciones',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
 
   public async getAsignacion(id: number) {
